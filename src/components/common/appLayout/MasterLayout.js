@@ -154,7 +154,7 @@ const MasterLayout = ({ children, history, isNews }) => {
             />
           )}
           <Layout>
-            <Content className="app-content" id="app-content">
+            <Content className="app-content">
               <div className="content-wrapper">
                 {React.cloneElement(children, {
                   // changeUserData: this.onChangeUserData,

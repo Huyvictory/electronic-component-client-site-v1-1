@@ -216,137 +216,145 @@ const ProductListPage = () => {
       wrapperClassName="full-screen-loading"
       spinning={isLoading}
     >
-      {
-        <List
-          grid={{
-            gutter: 16,
-            column: 4,
-            xs: 1,
-            sm: 2,
-            md: 3,
-            lg: 4,
-            xxl: 3,
-          }}
-          dataSource={data}
-          pagination={{
-            onChange: (page) => {
-              dispatch(
-                actions.getProductListClient({
-                  params: {
-                    categoryId: checkArray(data) ? data[0].categoryId : null,
-                    page: page - 1,
-                    size: pagination.pageSize,
-                    newFilterValue1,
-                    newFilterValue2,
-                  },
-                })
-              );
-            },
-            ...pagination,
-            showSizeChanger: false,
-            hideOnSinglePage: true,
-          }}
-          renderItem={(item) => (
-            <List.Item>
-              <Card
-                style={{ border: "1px solid #d9d9d" }}
-                hoverable
-                cover={
-                  <img
-                    alt="example"
-                    src={
-                      item.productImage
-                        ? `${AppConstants.contentRootUrl}${item.productImage}`
-                        : noimage
-                    }
-                  />
-                }
-                onClick={() => {
-                  if (item.hasChild) {
-                    setHasChild(true);
-                    setproductID(item.id);
-                    setcategoryID(item.categoryId);
-                    setproductName(item.productName);
-                    setShowModal(PRODUCT_DETAIL_MODAL);
-                  } else {
-                    setHasChild(false);
-                    setproductID(item.id);
-                    setcategoryID(item.categoryId);
-                    setproductName(item.productName);
-                    setShowModal(PRODUCT_DETAIL_MODAL);
+      <div id="app-content">
+        {
+          <List
+            grid={{
+              gutter: 16,
+              column: 4,
+              xs: 1,
+              sm: 2,
+              md: 3,
+              lg: 4,
+              xxl: 3,
+            }}
+            dataSource={data}
+            pagination={{
+              onChange: (page) => {
+                dispatch(
+                  actions.getProductListClient({
+                    params: {
+                      categoryId: checkArray(data) ? data[0].categoryId : null,
+                      page: page - 1,
+                      size: pagination.pageSize,
+                      newFilterValue1,
+                      newFilterValue2,
+                    },
+                  })
+                );
+              },
+              ...pagination,
+              showSizeChanger: false,
+              hideOnSinglePage: true,
+            }}
+            renderItem={(item) => (
+              <List.Item>
+                <Card
+                  style={{ border: "1px solid #d9d9d" }}
+                  hoverable
+                  cover={
+                    <img
+                      alt="example"
+                      src={
+                        item.productImage
+                          ? `${AppConstants.contentRootUrl}${item.productImage}`
+                          : noimage
+                      }
+                    />
                   }
-                }}
-              >
-                <Meta
-                  style={{ alignItems: "center" }}
-                  title={item.productName}
-                  description={`${Utils.formatNumber(item.productPrice)} Đ`}
-                />
-              </Card>
-              {checkCart(item) ? (
-                <div
-                  className="button-add-to-cart"
                   onClick={() => {
                     if (item.hasChild) {
+                      setHasChild(true);
                       setproductID(item.id);
+                      setcategoryID(item.categoryId);
                       setproductName(item.productName);
-                      setShowModal(PRODUCT_CHILD_MODAL);
+                      setShowModal(PRODUCT_DETAIL_MODAL);
                     } else {
-                      handleClickAddToCart(item);
+                      setHasChild(false);
+                      setproductID(item.id);
+                      setcategoryID(item.categoryId);
+                      setproductName(item.productName);
+                      setShowModal(PRODUCT_DETAIL_MODAL);
                     }
                   }}
                 >
-                  <div>Thêm vào giỏ hàng</div>
-                </div>
-              ) : (
-                <div className="container-plus-minus-buttons">
-                  <div className="inline-buttons">
-                    <Button
-                      size="large"
-                      onClick={() => {
-                        if (item.hasChild) {
-                          setproductID(item.id);
-                          setproductName(item.productName);
-                          setShowModal(PRODUCT_CHILD_MODAL);
-                        } else {
-                          if (itemsCart[AvailableItem(item.id)].quantity > 1) {
-                            minusItem(item.id);
-                          } else {
-                            handleDeleteItem(item.id);
-                          }
-                        }
-                      }}
-                    >
-                      -
-                    </Button>
+                  <Meta
+                    style={{ alignItems: "center" }}
+                    title={item.productName}
+                    description={`${Utils.formatNumber(item.productPrice)} Đ`}
+                  />
+                </Card>
+                {checkCart(item) ? (
+                  <div
+                    className="button-add-to-cart"
+                    onClick={() => {
+                      if (item.hasChild) {
+                        setproductID(item.id);
+                        setproductName(item.productName);
+                        setShowModal(PRODUCT_CHILD_MODAL);
+                      } else {
+                        handleClickAddToCart(item);
+                      }
+                    }}
+                  >
+                    <div>Thêm vào giỏ hàng</div>
                   </div>
-                  <div className="inline-buttons" style={{ padding: "0 15px" }}>
-                    <div style={{ fontWeight: "bold", color: "#2196F3" }}>
-                      {checkQuantity(item)}
+                ) : (
+                  <div className="container-plus-minus-buttons">
+                    <div className="inline-buttons">
+                      <Button
+                        size="large"
+                        onClick={() => {
+                          if (item.hasChild) {
+                            setproductID(item.id);
+                            setproductName(item.productName);
+                            setShowModal(PRODUCT_CHILD_MODAL);
+                          } else {
+                            if (
+                              itemsCart[AvailableItem(item.id)].quantity > 1
+                            ) {
+                              minusItem(item.id);
+                            } else {
+                              handleDeleteItem(item.id);
+                            }
+                          }
+                        }}
+                      >
+                        -
+                      </Button>
+                    </div>
+                    <div
+                      className="inline-buttons"
+                      style={{ padding: "0 15px" }}
+                    >
+                      <div style={{ fontWeight: "bold", color: "#2196F3" }}>
+                        {checkQuantity(item)}
+                      </div>
+                    </div>
+                    <div className="inline-buttons">
+                      <Button
+                        size="large"
+                        onClick={() => {
+                          if (item.hasChild) {
+                            setproductID(item.id);
+                            setproductName(item.productName);
+                            setShowModal(PRODUCT_CHILD_MODAL);
+                          } else {
+                            addItem(item.id);
+                          }
+                        }}
+                      >
+                        +
+                      </Button>
                     </div>
                   </div>
-                  <div className="inline-buttons">
-                    <Button
-                      size="large"
-                      onClick={() => {
-                        if (item.hasChild) {
-                          setproductID(item.id);
-                          setproductName(item.productName);
-                          setShowModal(PRODUCT_CHILD_MODAL);
-                        } else {
-                          addItem(item.id);
-                        }
-                      }}
-                    >
-                      +
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </List.Item>
-          )}
-        />
-      }
+                )}
+              </List.Item>
+            )}
+          />
+        }
+      </div>
+
       <Divider orientation="left">
         Danh sách sản phẩm bán chạy nhất shop
       </Divider>

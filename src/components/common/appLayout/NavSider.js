@@ -192,7 +192,7 @@ class NavSider extends Component {
             <Col span={12}>
               <Slider
                 min={55000}
-                max={700000}
+                max={3000000}
                 onChange={this.onChangeInputValue2}
                 value={
                   typeof this.state.inputValue2 === "number"
@@ -205,7 +205,7 @@ class NavSider extends Component {
               <InputNumber
                 style={{ margin: "0 10px" }}
                 min={55000}
-                max={700000}
+                max={3000000}
                 value={this.state.inputValue2}
                 onChange={this.onChangeInputValue2}
               />
